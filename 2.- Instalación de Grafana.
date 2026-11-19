@@ -1,1 +1,37 @@
+# 2.- Instalación de Grafana
 
+En este apartado se recogen los pasos de configuración del repositorio oficial, verificación del servicio, comprobación de puertos y primer acceso a la interfaz web de **Grafana**.
+
+## 1. Verificación de la clave GPG y configuración del repositorio APT
+
+Comprobamos la clave GPG descargada en `/usr/share/keyrings/grafana.gpg` mediante `gpg --show-keys`, verificando que pertenece a **Grafana Labs** (`engineering@grafana.com`, clave `rsa3072`).
+
+![Verificación de la clave GPG de Grafana](./img/grafana%20cap/graf2.png)
+
+Al intentar añadir el repositorio con `echo ... tee /etc/apt/sources.list.d/grafana.list` sin la tubería `|`, el comando únicamente imprimió la línea por pantalla sin escribir el fichero.
+
+![Error al olvidar la tubería antes de tee](./img/grafana%20cap/graf3.png)
+
+Corregimos el comando añadiendo la tubería `|` delante de `tee /etc/apt/sources.list.d/grafana.list` y comprobamos con `ls` y `cat grafana.list` que el repositorio `deb [signed-by=/usr/share/keyrings/grafana.gpg]https://packages.grafana.com/oss/deb stable main` se guardó correctamente.
+
+![Creación correcta de grafana.list](./img/grafana%20cap/graf4.png)
+
+## 2. Comprobación del servicio y puertos en escucha
+
+Tras instalar e iniciar Grafana, verificamos con `systemctl status grafana-server.service` que el servicio está **active (running)**, habilitado (`enabled`) y con todos sus plugins de orígenes de datos cargados (incluido `prometheus`).
+
+![Estado del servicio grafana-server](./img/grafana%20cap/graf6.png)
+
+Con `ss -plunt` comprobamos los puertos TCP en escucha del servidor `debian204`: `grafana` escucha en el puerto **3000**, `prometheus` en el **9090** y `prometheus-node` en el **9100** (junto con `apache2` en el 80 y `sshd` en el 22).
+
+![Puertos en escucha con ss -plunt](./img/grafana%20cap/graf9.png)
+
+## 3. Primer acceso a la interfaz web de Grafana
+
+Accediendo a `http://172.26.2.54:3000` desde el navegador entramos en la pantalla de bienvenida de Grafana, confirmando que la interfaz web está operativa.
+
+![Pantalla de bienvenida de Grafana](./img/grafana%20cap/graf7.png)
+
+Desde el menú lateral accedemos a la sección **Dashboards** (`http://172.26.2.54:3000/dashboards`), donde posteriormente crearemos o importaremos los paneles de visualización.
+
+![Sección Dashboards de Grafana](./img/grafana%20cap/graf8.png)

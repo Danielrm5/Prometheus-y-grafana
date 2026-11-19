@@ -1,1 +1,19 @@
+# 3.- Añadir Prometheus como Data Source
 
+En este apartado se documenta la conexión de **Prometheus** como origen de datos (*Data Source*) en **Grafana** y la carga del dashboard de monitorización de **Node Exporter**.
+
+## 1. Configuración y prueba del Data Source
+
+Dentro de **Connections > Data sources > prometheus**, tras indicar la URL del servidor Prometheus (`http://172.26.2.54:9090`) y revisar las opciones de configuración, pulsamos en **Save & test**. Grafana muestra el mensaje de confirmación en verde: **`Successfully queried the Prometheus API.`**
+
+![Prueba exitosa de conexión con Prometheus API](./img/grafana%20cap/graf10.png)
+
+Al volver al listado de **Data sources**, comprobamos que `prometheus` aparece conectado a `http://172.26.2.54:9090` y marcado como origen de datos predeterminado (**default**).
+
+![Listado de Data sources con Prometheus configurado](./img/grafana%20cap/graf11.png)
+
+## 2. Visualización con el dashboard Node Exporter Full
+
+Con Prometheus configurado como Data Source, importamos el dashboard **Node Exporter Full** seleccionando el origen `prometheus`, el job `node` y la instancia `172.26.2.54:9100` (`debian204`). En pantalla se visualizan tanto los indicadores rápidos (*Quick CPU / Mem / Disk*, núcleos, RAM, SWAP, RootFS y Uptime) como las gráficas de evolución temporal (*CPU Basic*, *Memory Basic*, *Network Traffic Basic* y *Disk Space Used Basic*).
+
+![Dashboard Node Exporter Full en Grafana](./img/grafana%20cap/graf12.png)

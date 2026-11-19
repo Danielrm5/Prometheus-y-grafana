@@ -1,1 +1,27 @@
+# 1.- Instalación de Prometheus
 
+En este apartado se documenta la verificación de **Node Exporter** y **Prometheus** tras su instalación y puesta en marcha.
+
+## 1. Verificación de Node Exporter
+
+Accediendo a `http://172.26.2.54:9100` desde el navegador comprobamos que el servicio **Prometheus Node Exporter** (versión `1.9.0`) está activo y escuchando correctamente. Desde esta página podemos acceder al enlace **Metrics** o descargar perfiles de uso de recursos (`pprof`).
+
+![Interfaz web de Node Exporter](./img/prometheus%20cap/prome5.png)
+
+Al entrar en `http://172.26.2.54:9100/metrics`, Node Exporter expone todas las métricas del sistema y del entorno Go en texto plano (por ejemplo, `apt_upgrades_pending`, `go_gc_duration_seconds`, `go_goroutines`, `go_memstats_alloc_bytes`, etc.), listas para ser recolectadas por Prometheus.
+
+![Métricas expuestas en /metrics de Node Exporter](./img/prometheus%20cap/prome6.png)
+
+## 2. Acceso a la interfaz web de Prometheus y primeras consultas
+
+Accediendo a `http://172.26.2.54:9090/classic/graph` abrimos la interfaz clásica de **Prometheus**, donde disponemos del campo **Expression** para ejecutar consultas en PromQL.
+
+![Interfaz web clásica de Prometheus](./img/prometheus%20cap/prome1.png)
+
+Como primera prueba, consultamos la métrica `node_cpu_seconds_total` en la pestaña **Console**. Prometheus devuelve las 8 series temporales correspondientes a los distintos modos de CPU (`idle`, `iowait`, `irq`, `nice`, `softirq`, `steal`, `system`, `user`) de la instancia `172.26.2.54:9100`.
+
+![Consulta de node_cpu_seconds_total en Prometheus](./img/prometheus%20cap/prome2.png)
+
+Finalmente, probamos una expresión PromQL filtrando por el modo `idle` (`100*(1-(node_cpu_seconds_total{mode="idle"}))`) para observar cómo operar matemáticamente sobre las métricas obtenidas desde la consola de Prometheus.
+
+![Consulta PromQL sobre node_cpu_seconds_total en modo idle](./img/prometheus%20cap/prome4.png)
